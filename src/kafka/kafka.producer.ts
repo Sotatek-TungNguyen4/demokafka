@@ -29,7 +29,7 @@ export class KafkaProducer {
       ssl,
       sasl,
     }
-    this.kafka = new Kafka(kafkaConfig);
+    this.kafka = new Kafka({...kafkaConfig, connectionTimeout: 10000});
     this.producer = this.kafka.producer();
     await this.producer.connect();
     console.log('load client complete')

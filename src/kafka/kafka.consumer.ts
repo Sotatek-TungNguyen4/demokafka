@@ -79,7 +79,7 @@ export class KafkaConsumer {
       ssl,
       sasl,
     }
-    this.kafka = new Kafka(kafkaConfig);
+    this.kafka = new Kafka({ ...kafkaConfig, connectionTimeout: 10000 });
   }
 
 }

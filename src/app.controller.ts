@@ -14,6 +14,6 @@ export class AppController {
 
   @Post()
   async pushToKafka(@Body() request: any,): Promise<any> {
-    return await KafkaProducer.pushKafka({ topic: 'listen-confluent', ...request })
+    return await KafkaProducer.pushKafka({ topic: this.configService.get('topic', 'link-listen-confluent'), ...request })
   }
 }

@@ -43,7 +43,7 @@ export class KafkaConsumer {
     console.log('consumer connected')
 
     await consumer.subscribe({
-      topic: "listen-confluent",
+      topic: this.configService.get('topic', 'link-listen-confluent'),
       fromBeginning: true,
     });
     await consumer.run({

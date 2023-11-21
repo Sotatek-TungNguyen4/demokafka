@@ -14,7 +14,10 @@ export class KafkaProducer {
   }
 
   async loadClient() {
-    this.kafka = new Kafka({
+    const { KAFKA_USERNAME: username, KAFKA_PASSWORD: password } = process.env
+    const sasl = username && password ? { username, password, mechanism: 'plain' } : null
+    const ssl = !!sasl
+    const kafkaConfig: any = {
       logLevel: logLevel.INFO,
       brokers: this.configService
         .get<string>('KAFKA_BROKERS', 'localhost:9093')
@@ -23,9 +26,13 @@ export class KafkaProducer {
         'KAFKA_CLIENT',
         'ubet-m-user-process',
       ),
-    });
+      ssl,
+      sasl,
+    }
+    this.kafka = new Kafka(kafkaConfig);
     this.producer = this.kafka.producer();
     await this.producer.connect();
+    console.log('load client complete')
   }
 
 

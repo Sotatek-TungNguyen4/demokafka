@@ -40,6 +40,7 @@ export class KafkaConsumer {
       groupId: this.configService.get('group_id', 'demo-confluent'),
     });
     await consumer.connect();
+    console.log('consumer connected')
 
     await consumer.subscribe({
       topic: "listen-confluent",
@@ -63,16 +64,22 @@ export class KafkaConsumer {
   }
 
   async loadClient() {
-    this.kafka = new Kafka({
+    const { KAFKA_USERNAME: username, KAFKA_PASSWORD: password } = process.env
+    const sasl = username && password ? { username, password, mechanism: 'plain' } : null
+    const ssl = !!sasl
+    const kafkaConfig: any = {
       logLevel: logLevel.INFO,
       brokers: this.configService
         .get<string>('KAFKA_BROKERS', 'localhost:9093')
         .split(','),
       clientId: this.configService.get<string>(
         'KAFKA_CLIENT',
-        'ubet-sportbook-crawler',
+        'ubet-m-user-process',
       ),
-    });
+      ssl,
+      sasl,
+    }
+    this.kafka = new Kafka(kafkaConfig);
   }
 
 }

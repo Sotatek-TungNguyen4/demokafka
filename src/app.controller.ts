@@ -19,6 +19,7 @@ export class AppController {
 
   @Post('random')
   async randomPush(@Body() request: any): Promise<any> {
+    console.log('request:', request);
     for (let index = 0; index < (request.number || 0); index++) {
       KafkaProducer.pushKafka({ topic: this.configService.get('topic', 'link-listen-confluent'), id: index, ...request })
     }

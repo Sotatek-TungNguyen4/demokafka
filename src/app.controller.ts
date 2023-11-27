@@ -16,4 +16,12 @@ export class AppController {
   async pushToKafka(@Body() request: any,): Promise<any> {
     return await KafkaProducer.pushKafka({ topic: this.configService.get('topic', 'link-listen-confluent'), ...request })
   }
+
+  @Post('random')
+  async randomPush(@Body() request: any): Promise<any> {
+    for (let index = 0; index < (request.number || 0); index++) {
+      KafkaProducer.pushKafka({ topic: this.configService.get('topic', 'link-listen-confluent'), id: index, ...request })
+    }
+    return { number: request.number };
+  }
 }

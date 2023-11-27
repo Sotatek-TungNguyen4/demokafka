@@ -53,11 +53,12 @@ export class KafkaConsumer {
         partition: number;
         message: KafkaMessage;
       }) => {
+        const now = Date.now();
         const { message } = kafkaData;
         console.log('message at consumer: ', message.value.toString(), message.timestamp, message.offset);
         const messageData = JSON.parse(message.value.toString() || '{}');
         const { content, sendAt } = messageData;
-        console.log('spent ', content?.id, sendAt, (Date.now() - +sendAt));
+        console.log('spent ', content?.id, sendAt, (now - +sendAt), (now - +message.timestamp));
       },
     });
     console.log('listen kafa');

@@ -14,6 +14,9 @@ export class KafkaProducer {
   }
 
   async loadClient() {
+    if (this.configService.get('enable_consumer', '0') != '1') {
+      return;
+    }
     const { KAFKA_USERNAME: username, KAFKA_PASSWORD: password } = process.env
     const sasl = username && password ? { username, password, mechanism: 'plain' } : null
     const ssl = !!sasl
@@ -29,7 +32,7 @@ export class KafkaProducer {
       ssl,
       sasl,
     }
-    this.kafka = new Kafka({...kafkaConfig, connectionTimeout: 10000});
+    this.kafka = new Kafka({ ...kafkaConfig, connectionTimeout: 10000 });
     this.producer = this.kafka.producer();
     await this.producer.connect();
     console.log('load client complete')

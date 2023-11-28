@@ -14,9 +14,6 @@ export class KafkaProducer {
   }
 
   async loadClient() {
-    if (this.configService.get('enable_consumer', '0') != '1') {
-      return;
-    }
     const { KAFKA_USERNAME: username, KAFKA_PASSWORD: password } = process.env
     const sasl = username && password ? { username, password, mechanism: 'plain' } : null
     const ssl = !!sasl

@@ -34,6 +34,9 @@ export class KafkaConsumer {
   // }
 
   async listen() {
+    if (this.configService.get('enable_consumer', '0') != '1') {
+      return;
+    }
     await this.loadClient();
 
     const consumer = this.kafka.consumer({
@@ -65,6 +68,9 @@ export class KafkaConsumer {
   }
 
   async loadClient() {
+    if (this.configService.get('enable_consumer', '0') != '1') {
+      return;
+    }
     const { KAFKA_USERNAME: username, KAFKA_PASSWORD: password } = process.env
     const sasl = username && password ? { username, password, mechanism: 'plain' } : null
     const ssl = !!sasl
